@@ -1,5 +1,5 @@
 import express from "express"
-import userRouter from "./routes/user"
+import userRouter from "./routes/user.route"
 import errorMiddleware from "./middleware/error.middleware"
 const app = express()
 

@@ -1,4 +1,4 @@
-import { createAccount } from "../controller/user";
+import { createAccount } from "../controller/user.controller";
 import { Router } from "express"
 import validatorMiddleware from "../middleware/validator.middleware";
 import createAccountSchema from "../validator_schema/createAccountShema";
