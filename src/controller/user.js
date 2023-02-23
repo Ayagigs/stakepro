@@ -1,4 +1,3 @@
-import HttpException from "../exceptions/HttpException"
 
 const createAccount = async (req, res, next) => {
     try {
