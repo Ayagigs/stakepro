@@ -1,3 +1,8 @@
 .env
 node_modules
 dist
+assets/uploads
+dist
+package-lock.json
+yarn-error.log
+/tmp
