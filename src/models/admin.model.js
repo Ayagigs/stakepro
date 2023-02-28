@@ -1,56 +1,49 @@
-import moment from 'moment';
-import bcrypt from "bcrypt"
-import { Schema } from 'mongoose';
+import moment from "moment";
+import bcrypt from "bcrypt";
+import { Schema } from "mongoose";
 
-const userSchema = new Schema({
+const adminSchema = new Schema({
     email: {
         type: String,
         required: true,
         unique: true,
-        lowercase: true
+        lowercase: true,
     },
     username: {
         type: String,
         required: true,
         unique: true,
         lowercase: true,
-        trim: true
+        trim: true,
     },
     password: {
         type: String,
         required: true,
         select: false,
     },
-    phoneNumber: {
-        type: Number,
-        required: true,
-    },
     isVerified: {
         type: Boolean,
-        default: false
+        default: false,
     },
     isBlocked: {
         type: Boolean,
-        default: false
+        default: false,
     },
-    dob: {
-        type: Date
-    },
-    joinedAt: {
+    addedAt: {
         type: Date,
         default: () => moment().toDate(),
     },
-})
+});
 
-userSchema.pre('save', async function (next) {
+adminSchema.pre("save", async function (next) {
     if (!this.isModified("password")) next();
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
-})
+});
 
-userSchema.methods.isPasswordMatch = async function (password) {
-    return await bcrypt.compare(password, this.password)
-}
+adminSchema.methods.isPasswordMatch = async function (password) {
+    return await bcrypt.compare(password, this.password);
+};
 
-const userModel = model('User', userSchema);
-export default userModel;
+const adminModel = model("Admin", adminSchema);
+export default adminModel;
