@@ -2,6 +2,7 @@ import express from "express"
 import userRouter from "./routes/user.route"
 import errorMiddleware from "./middleware/error.middleware"
 import { connectDB } from "./config"
+import adminRouter from "./routes/admin.route"
 
 const app = express()
 
@@ -13,6 +14,7 @@ app.use(express.json())
 
 // add routes here
 app.use(`${path}/user`, userRouter)
+app.use(`${path}/admin`, adminRouter)
 
 
 
