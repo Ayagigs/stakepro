@@ -1,6 +1,6 @@
 import moment from "moment";
 import bcrypt from "bcrypt";
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 
 const adminSchema = new Schema({
     email: {

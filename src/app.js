@@ -1,10 +1,13 @@
 import express from "express"
 import userRouter from "./routes/user.route"
 import errorMiddleware from "./middleware/error.middleware"
+import { connectDB } from "./config"
+
 const app = express()
 
 const port = 8080
 const path = "/api/v1"
+connectDB()
 
 app.use(express.json())
 
