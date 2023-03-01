@@ -2,7 +2,7 @@ import { MAIL_PASS, MAIL_SERVICE, MAIL_USER } from "../config"
 import nodemailer from "nodemailer"
 import HttpException from "../exceptions/HttpException"
 
-export async function sendMail(options) {
+async function sendMail(options) {
     try {
         const transporter = nodemailer.createTransport({
             service: MAIL_SERVICE,
