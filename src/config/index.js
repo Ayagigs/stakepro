@@ -9,7 +9,6 @@ config();
 export async function connectDB() {
     try {
         set("strictQuery", false);
-        console.log(process.env.MONGODB_URI)
         await connect(process.env.MONGODB_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
