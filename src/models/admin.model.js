@@ -25,6 +25,10 @@ const adminSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    isAccepted: {
+        type: Boolean,
+        default: false,
+    },
     isBlocked: {
         type: Boolean,
         default: false,
