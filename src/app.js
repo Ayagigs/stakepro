@@ -1,5 +1,7 @@
 import express from "express"
 import userRouter from "./routes/user.route"
+import faqRouter from "./routes/faq.route"
+
 import errorMiddleware from "./middleware/error.middleware"
 import { connectDB } from "./config"
 
@@ -13,7 +15,7 @@ app.use(express.json())
 
 // add routes here
 app.use(`${path}/user`, userRouter)
-
+app.use(`${path}/faq`, faqRouter)
 
 
 app.use(errorMiddleware)
