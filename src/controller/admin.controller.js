@@ -1,10 +1,17 @@
 import HttpException from "../exceptions/HttpException"
+import { validateEmail } from "../utils/email-validator"
 
 export const registerEmail = async (req, res) => {
     try {
+        const {email} = req.body
+        if (validateEmail(email)) {
+              
+             await Medicine.create({
+               email
+              });
+        }
+        throw new HttpException(400,"Invaid Email!")
         
-            throw new HttpException(400,"Email address taken")
-        // return res.status(200).send("create a stakepro account")
     } catch (err) {
         next(err)
     }
