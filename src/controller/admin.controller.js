@@ -117,3 +117,42 @@ export const updateAdminRecord = async (req, res, next) => {
     }
 }
 
+
+export const activateAdmin = async (req, res, next) => {
+    try {
+        const {id} = req.params.id
+        if (id) {
+            const admin = await Admin.findOne({id})
+            if (!admin) {
+                return res.json({
+                    status: "error",
+                    message: "No admin details found",
+                  });
+            }
+            if (admin.isVerified) {
+                return res.json({
+                    status: "error",
+                    message: "Admin has already been verified",
+                  });
+            }
+            admin.isVerified = true
+            await admin.save()
+            return res.json({
+                status: "success",
+                message: `${admin.username} account has now been activated.`,
+              });
+
+        }
+        else {
+            return res.json({
+                status: "error",
+                message: "Invalid request",
+              });
+        }
+    }
+    catch (err) {
+        next(err)
+    }
+}
+
+
