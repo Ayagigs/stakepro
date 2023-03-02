@@ -32,7 +32,7 @@ export const registerEmail = async (req, res, next) => {
                 to: email,
                 subject: 'Admin account registration',
                 text: `Dear ${email}, kindly follow this link in order to continue with your registration process as an admin!
-                <a href='http://localhost:8080/admin-registration-continuation?email=${email}&token=${generateToken(email)}'>sign up</a>`
+                <a href='http://localhost:8080/api/v1/admin/admin-registration-continuation?email=${email}&token=${generateToken(email)}'>sign up</a>`
               }
               await sendMail(mailOptions)
 
@@ -110,10 +110,6 @@ export const updateAdminRecord = async (req, res, next) => {
                 message: "Invalid request",
               });
         }
-
-        
-
-
 
     }
     catch (err) {
