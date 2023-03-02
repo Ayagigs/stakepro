@@ -15,7 +15,7 @@ async function sendMail(options) {
         console.log("mail sent")
     } catch (err) {
         if (err instanceof Error) {
-            console.log(err.message)
+            console.log("Error CATCHED"+err.message)
             throw new HttpException(500, "couldn't send mail")
         }
     }
