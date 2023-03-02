@@ -3,7 +3,9 @@ import Admin from "../models/admin.model";
 // import {adminModel} from "../models/admin.model";
 // import adminModel from "../models/admin.model";
 import { validateEmail } from "../utils/email-validator"
+import { validateField } from "../utils/input-validator";
 import generateToken from "../utils/jwt/generate-token";
+import { passwordValidator } from "../utils/password-validator";
 import sendMail from "../utils/sendMail";
 
 export const registerEmail = async (req, res, next) => {
@@ -66,11 +68,40 @@ export const updateAdminRecord = async (req, res, next) => {
                     message: "Invalid email",
                   });
             }
+
+            const {username, password} = req.body
+
+            if (!validateField(username)) {
+                return res.json({
+                    status: "error",
+                    message: "Username must not be less than 6 characters long",
+                  });
+            }
+
+            const existingAdmin = await Admin.findOne({username})
+            if (existingAdmin) {
+                return res.json({
+                    status: "error",
+                    message: "Username has already been taken",
+                  });
+            }
             
-            const existingAdmin = 
+            if (!passwordValidator(password)) {
+                return res.json({
+                    status: "error",
+                    message: "Password must contain a number, a special character, an uppercase letter, and not less than 8 characters long",
+                  });
+            }
 
+            admin.username = username
+            admin.password = password
+            admin.isAccepted = true
+            await admin.save();
 
-
+            return res.json({
+                status: "success",
+                message: "Your account has been successfully created, you would be notified once your account is being activated.",
+              });
         }
 
         else {
