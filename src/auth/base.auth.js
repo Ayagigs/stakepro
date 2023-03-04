@@ -7,7 +7,7 @@ const hasToken = async (req, res, next) => {
     const token = autHeader && autHeader.split(" ")[1]
     if (!token) throw new HttpException(401, "no auth key")
     const verifiedToken = jwt.verify(ACCESS_TOKEN)
-    return verifiedToken
+    return verifiedToken;
 }
 
-export default hasToken
+export default hasToken;
