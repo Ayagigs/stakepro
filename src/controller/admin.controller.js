@@ -130,7 +130,7 @@ export const adminLogin = async (req, res, next) => {
     try {
         const {email, password} = req.body
         
-        if (validateEmail(email)) {
+        if (email && password && validateEmail(email)) {
             const admin = await Admin.findOne({email})
 
             if (!admin || !admin.isPasswordMatch(password)) {
