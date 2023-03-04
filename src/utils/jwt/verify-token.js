@@ -6,3 +6,10 @@ export const verifyToken = token => {
         return decoded 
     })
 }
+
+export const extractEmailFromToken = (token, email) => {
+    const extractedEmail = verifyToken(token);
+    console.log("Extracted: ", extractedEmail);
+    console.log("Extracted Email: ", extractedEmail.email);
+    return extractedEmail.email == email
+}

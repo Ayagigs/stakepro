@@ -47,5 +47,5 @@ adminSchema.methods.isPasswordMatch = async function (password) {
     return await bcrypt.compare(password, this.password);
 };
 
-const Admin = mongoose.model("Admin3", adminSchema);
+const Admin = mongoose.model("Admin5", adminSchema);
 export default Admin;

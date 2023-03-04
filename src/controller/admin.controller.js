@@ -3,6 +3,7 @@ import Admin from "../models/admin.model";
 import { validateEmail } from "../utils/email-validator"
 import { validateField } from "../utils/input-validator";
 import generateToken from "../utils/jwt/generate-token";
+import { extractEmailFromToken } from "../utils/jwt/verify-token";
 import { passwordValidator } from "../utils/password-validator";
 import sendMail from "../utils/sendMail";
 
@@ -19,8 +20,8 @@ export const registerEmail = async (req, res, next) => {
                 from: process.env.MAIL_USER,
                 to: email,
                 subject: 'Admin account registration',
-                text: `Dear ${email}, kindly follow this link in order to continue with your registration process as an admin!
-                <a href="http://localhost:8080/api/v1/admin/admin-registration-continuation?email=${email}&token=${token}">sign up</a>`
+                text: `Dear ${email}, kindly follow this link in order to continue with your registration process as an admin!\n
+                "http://localhost:8080/api/v1/admin/admin-registration-continuation?email=${email}&token=${token}"`
               }
               await sendMail(mailOption)
               const admin = await Admin.create({
@@ -30,6 +31,7 @@ export const registerEmail = async (req, res, next) => {
               return res.json({
                 status: "success",
                 message: "A registration link has been successfully sent to your email, kindly continue your registration from there.",
+                token: token
               });
         }
         else {
@@ -47,6 +49,9 @@ export const updateAdminRecord = async (req, res, next) => {
         const {email, token} = req.query
 
         if (email && token) {
+            if (!extractEmailFromToken(token, email)) {
+                throw new HttpException(400,"Invalid or expired token")
+            }
             const admin = await Admin.findOne({email})
             if (!admin) {
                 throw new HttpException(400,"Invalid email")
