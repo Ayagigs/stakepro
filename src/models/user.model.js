@@ -9,21 +9,19 @@ const userSchema = new Schema({
         unique: true,
         lowercase: true
     },
+    googleId:String,
     username: {
         type: String,
         required: true,
-        unique: true,
         lowercase: true,
         trim: true
     },
     password: {
         type: String,
-        required: true,
         select: false,
     },
     phoneNumber: {
-        type: Number,
-        required: true,
+        type: String,
     },
     isVerified: {
         type: Boolean,

@@ -1,9 +1,5 @@
 import Joi from "joi";
-import { PhoneNumberUtil } from "google-libphonenumber"
 
-
-const phoneUtil = PhoneNumberUtil.getInstance();
-import logger from "../utils/logger"
 
 const createAccountSchema = Joi.object({
     username: Joi.string().required().min(3),

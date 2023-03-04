@@ -34,4 +34,6 @@ export const {
     MAIL_PASS,
     MAIL_USER,
     WEB_URL,
+    GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET,
 } = process.env;
