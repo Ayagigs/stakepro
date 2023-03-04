@@ -17,7 +17,7 @@ const adminSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        select: false,
+        // select: false,
     },
     isVerified: {
         type: Boolean,
@@ -47,5 +47,5 @@ adminSchema.methods.isPasswordMatch = async function (password) {
     return await bcrypt.compare(password, this.password);
 };
 
-const Admin = mongoose.model("Admin2", adminSchema);
+const Admin = mongoose.model("Admin3", adminSchema);
 export default Admin;

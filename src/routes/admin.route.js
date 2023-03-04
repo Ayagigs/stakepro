@@ -5,7 +5,7 @@ const adminRouter = express.Router();
 
 adminRouter.post("/admin-register-email", registerEmail)
 adminRouter.put("/admin-registration-continuation", updateAdminRecord)
-adminRouter.put("/admin-activation/:id", activateAdmin)
+adminRouter.patch("/admin-activation/:id", activateAdmin)
 adminRouter.post("/login", adminLogin)
 
 
