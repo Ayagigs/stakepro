@@ -17,10 +17,7 @@ export const registerEmail = async (req, res, next) => {
             const existingAdmin = await Admin.findOne({email})
 
             if (existingAdmin) {
-                  return res.json({
-                status: "error",
-                message: "A registration link has been successfully sent to your email, kindly continue your registration from there.",
-              });
+                throw new HttpException(400,"Email already exists, kindly login")
             }
 
             const admin = await Admin.create({
@@ -41,14 +38,10 @@ export const registerEmail = async (req, res, next) => {
                 message: "A registration link has been successfully sent to your email, kindly continue your registration from there.",
                 body: admin,
               });
-            //   return res.json({
-            //     status: "success",
-            //     message: "A registration link has been successfully sent to your email, kindly continue your registration from there.",
-            //   });
         }
         else {
 
-            throw new HttpException(400,"Invaid Email!")
+            throw new HttpException(400,"Invalid Email!")
         }
         
     } catch (err) {
@@ -63,34 +56,25 @@ export const updateAdminRecord = async (req, res, next) => {
         if (email && token) {
             const admin = await Admin.findOne({email})
             if (!admin) {
-                return res.json({
-                    status: "error",
-                    message: "Invalid email",
-                  });
+                throw new HttpException(400,"Invalid email")
             }
 
             const {username, password} = req.body
 
             if (!validateField(username)) {
-                return res.json({
-                    status: "error",
-                    message: "Username must not be less than 6 characters long",
-                  });
+                throw new HttpException(400,"Username must not be less than 6 characters long")
             }
 
             const existingAdmin = await Admin.findOne({username})
             if (existingAdmin) {
-                return res.json({
-                    status: "error",
-                    message: "Username has already been taken",
-                  });
+                throw new HttpException(400,"Username has already been taken")
             }
             
             if (!passwordValidator(password)) {
-                return res.json({
-                    status: "error",
-                    message: "Password must contain a number, a special character, an uppercase letter, and not less than 8 characters long",
-                  });
+                throw new HttpException(
+                    400,
+                    "Password must contain a number, a special character, an uppercase letter, and not less than 8 characters long"
+                    )
             }
 
             admin.username = username
@@ -105,10 +89,7 @@ export const updateAdminRecord = async (req, res, next) => {
         }
 
         else {
-            return res.json({
-                status: "error",
-                message: "Invalid request",
-              });
+            throw new HttpException(400,"Invalid request")
         }
 
     }
@@ -117,23 +98,16 @@ export const updateAdminRecord = async (req, res, next) => {
     }
 }
 
-
 export const activateAdmin = async (req, res, next) => {
     try {
         const {id} = req.params.id
         if (id) {
             const admin = await Admin.findOne({id})
             if (!admin) {
-                return res.json({
-                    status: "error",
-                    message: "No admin details found",
-                  });
+                throw new HttpException(400,"No admin details found")
             }
             if (admin.isVerified) {
-                return res.json({
-                    status: "error",
-                    message: "Admin has already been verified",
-                  });
+                throw new HttpException(400,"Admin has already been verified")
             }
             admin.isVerified = true
             await admin.save()
@@ -144,13 +118,39 @@ export const activateAdmin = async (req, res, next) => {
 
         }
         else {
-            return res.json({
-                status: "error",
-                message: "Invalid request",
-              });
+            throw new HttpException(400,"Invalid request")
         }
     }
     catch (err) {
+        next(err)
+    }
+}
+
+export const adminLogin = async (req, res, next) => {
+    try {
+        const {email, password} = req.body
+        
+        if (validateEmail(email)) {
+            const admin = await Admin.findOne({email})
+
+            if (!admin || !admin.isPasswordMatch(password)) {
+                throw new HttpException(400,"Incorrect Email or Password")
+            }
+            else if(!admin.isVerified) {
+                throw new HttpException(400,"Unverified account")
+            }
+            else {
+                return res.json({
+                    status: "success",
+                    message: `Dear ${admin.username}, welcome to the admin dashboard`,
+                  });
+            }
+        }
+        else {
+            throw new HttpException(400,"Invalid Email!")
+        }
+        
+    } catch (err) {
         next(err)
     }
 }
