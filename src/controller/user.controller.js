@@ -14,14 +14,6 @@ export async function createAccount(req, res, next) {
         const emailTaken = await userModel.findOne({ email: data.email });
         if (emailTaken) throw new HttpException(409, "email taken");
 
-        const userTaken = await userModel.findOne({ username: data.username });
-        if (userTaken) throw new HttpException(409, "username taken");
-
-        const phoneNumberTaken = await userModel.findOne({
-            phoneNumber: data.phoneNumber,
-        });
-        if (phoneNumberTaken) throw new HttpException(409, "phone number taken");
-
         const newAccount = await userModel.create({ ...data });
         if (!newAccount) throw new HttpException(500, "an error occurred");
 
