@@ -3,6 +3,7 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "../config";
 import userModel from "../models/user.model";
 
+
 passport.use(
     new GoogleStrategy(
         {
@@ -19,9 +20,7 @@ passport.use(
                     email: profile._json.email,
                 };
 
-                let user = await userModel.findOne({
-                    $or: [{ username: googleuser.username }, { email: googleuser.email }],
-                });
+                let user = await userModel.findOne({ email: googleuser.email });
                 if (!user) user = await userModel.create(googleuser);
                 else {
                     user = await userModel.findOneAndUpdate(
@@ -30,20 +29,10 @@ passport.use(
                         { new: true }
                     );
                 }
-                return done(null, profile);
+                return done(null, user);
             } catch (error) {
                 return done(error);
             }
         }
     )
 );
-
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-    userModel.findById(id, (err, user) => {
-        done(err, user);
-    });
-});

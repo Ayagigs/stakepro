@@ -43,7 +43,7 @@ export async function loginAccount(req, res, next) {
         if (findByEmail.isBlocked)
             throw new HttpException(403, "account is has been blocked");
 
-        const accessToken = jwt.sign({ value: email }, ACCESS_TOKEN, {
+        const accessToken = jwt.sign({ value: findByEmail._id }, ACCESS_TOKEN, {
             expiresIn: "30d",
         });
 
@@ -108,7 +108,7 @@ async function sendVerificationMail(email) {
         subject: "verify account",
         html: emailTemplate,
     });
-}
+} 
 
 export async function resendVerificationMail(req, res, next) {
     try {

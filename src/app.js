@@ -3,7 +3,6 @@ import userRouter from "./routes/user.route"
 import errorMiddleware from "./middleware/error.middleware"
 import { connectDB } from "./config"
 import passport from "passport";
-require("./strategy/google.strategy")
 
 const app = express()
 
