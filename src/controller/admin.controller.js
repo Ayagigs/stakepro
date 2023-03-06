@@ -200,4 +200,28 @@ export const adminsController = async (req, res, next) => {
     }
   };
 
+export const deleteAdminController = async (req, res, next) => {
+    const {id} = req.params.id;
+    try {
+        if (id) {
+            const admin = await Admin.findOneAndDelete({_id: id})
+            if (!admin) {
+                throw new HttpException(400,"Invalid request")
+            }
+            res.json({
+                status: "success",
+                message: "Account has been deleted successfully",
+            });
+        }
+        else {
+            throw new HttpException(400,"Invalid request")
+        }
+
+      
+    } 
+    catch (error) {
+        next(error)
+    }
+  };
+
 
