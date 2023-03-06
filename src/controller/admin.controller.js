@@ -158,4 +158,28 @@ export const adminLogin = async (req, res, next) => {
     }
 }
 
+export const adminProfileUpdate = async (req, res, next) => {
+    try {
+        const id = req.params.id
+        if (id) {
+            const {firstname, lastname} = req.body
+            const admin = await Admin.findOneAndUpdate({_id: id}, firstname, lastname, {
+                new: true,
+                runValidators: true
+              })
+            return res.json({
+                status: "success",
+                message: `Dear ${admin.firstname}, your account has now been updated.`,
+              });
+
+        }
+        else {
+            throw new HttpException(400,"Invalid request")
+        }
+    }
+    catch (err) {
+        next(err)
+    }
+}
+
 
