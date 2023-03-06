@@ -167,6 +167,11 @@ export const adminProfileUpdate = async (req, res, next) => {
                 new: true,
                 runValidators: true
               })
+
+              if (!admin) {
+                throw new HttpException(400,"Admin not found")
+              }
+
             return res.json({
                 status: "success",
                 message: `Dear ${admin.firstname}, your account has now been updated.`,
@@ -181,5 +186,18 @@ export const adminProfileUpdate = async (req, res, next) => {
         next(err)
     }
 }
+
+export const adminsController = async (req, res, next) => {
+    try {
+      const admins = await Admin.find({})
+      res.json({
+        status: "success",
+        data: admins,
+      });
+    } 
+    catch (error) {
+        next(error)
+    }
+  };
 
 
