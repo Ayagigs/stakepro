@@ -31,7 +31,7 @@ Specify the path inwhich you want to clone the project into on your terminal or 
 Once you are in the folder where you want the project to be then copy the git command below to clone the project
  
 ``` 
-git clone https://github.com/Ayagigs/stakepro 
+git clone --branch DEVELOPMENT https://github.com/Ayagigs/stakepro.git
 ```
 
 After cloning the project the will be a new folder added on your local computer with the reopsitory name, you can now open the folder in your IDE `Visual Studio code` 
