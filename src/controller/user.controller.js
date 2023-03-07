@@ -10,6 +10,7 @@ import otpModel from "../models/otp.model";
 
 export async function createAccount(req, res, next) {
     try {
+      
         const data = req.body;
         const emailTaken = await userModel.findOne({ email: data.email });
         if (emailTaken) throw new HttpException(409, "email taken");

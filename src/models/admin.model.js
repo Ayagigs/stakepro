@@ -1,8 +1,9 @@
 import moment from "moment";
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 import { Schema, model } from "mongoose";
 
-const adminSchema = new Schema({
+const adminSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
@@ -11,15 +12,13 @@ const adminSchema = new Schema({
     },
     username: {
         type: String,
-        required: true,
-        unique: true,
+        // unique: true,
         lowercase: true,
         trim: true,
     },
     password: {
         type: String,
-        required: true,
-        select: false,
+        // select: false,
     },
     isVerified: {
         type: Boolean,
@@ -49,5 +48,5 @@ adminSchema.methods.isPasswordMatch = async function (password) {
     return await bcrypt.compare(password, this.password);
 };
 
-const adminModel = model("Admin", adminSchema);
-export default adminModel;
+const Admin = mongoose.model("Admin5", adminSchema);
+export default Admin;
