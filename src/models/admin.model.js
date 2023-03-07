@@ -1,6 +1,7 @@
 import moment from "moment";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
 const adminSchema = new mongoose.Schema({
     email: {

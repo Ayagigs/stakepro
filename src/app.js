@@ -1,5 +1,7 @@
 import express from "express"
 import userRouter from "./routes/user.route"
+import faqRouter from "./routes/faq.route"
+
 import errorMiddleware from "./middleware/error.middleware"
 import { connectDB } from "./config"
 import adminRouter from "./routes/admin.route"
@@ -16,6 +18,7 @@ app.use(express.json())
 app.use(`${path}/user`, userRouter)
 app.use(`${path}/admin`, adminRouter)
 
+app.use(`${path}/faq`, faqRouter)
 
 
 app.use(errorMiddleware)
