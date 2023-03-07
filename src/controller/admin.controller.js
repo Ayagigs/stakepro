@@ -31,7 +31,6 @@ export const registerEmail = async (req, res, next) => {
               return res.json({
                 status: "success",
                 message: "A registration link has been successfully sent to your email, kindly continue your registration from there.",
-                token: token
               });
         }
         else {
@@ -160,13 +159,18 @@ export const adminLogin = async (req, res, next) => {
 
 export const adminProfileUpdate = async (req, res, next) => {
     try {
-        const id = req.params.id
-        if (id) {
+        const {id} = req.params
+        console.log("ID: ", id);
+        if (!id) {
+            throw new HttpException(400,"Invalid request")
+        }
+        else {
             const {firstname, lastname} = req.body
-            const admin = await Admin.findOneAndUpdate({_id: id}, firstname, lastname, {
-                new: true,
-                runValidators: true
-              })
+            const admin = await Admin.findOneAndUpdate(
+                {_id: id}, 
+                {firstname: firstname, lastname: lastname},
+                {new: true, runValidators: true}
+              )
 
               if (!admin) {
                 throw new HttpException(400,"Admin not found")
@@ -176,13 +180,11 @@ export const adminProfileUpdate = async (req, res, next) => {
                 status: "success",
                 message: `Dear ${admin.firstname}, your account has now been updated.`,
               });
-
-        }
-        else {
-            throw new HttpException(400,"Invalid request")
+            
         }
     }
     catch (err) {
+        console.log("Error: ", err);
         next(err)
     }
 }
@@ -201,12 +203,12 @@ export const adminsController = async (req, res, next) => {
   };
 
 export const deleteAdminController = async (req, res, next) => {
-    const {id} = req.params.id;
+    const id = req.params.id;
     try {
         if (id) {
             const admin = await Admin.findOneAndDelete({_id: id})
             if (!admin) {
-                throw new HttpException(400,"Invalid request")
+                throw new HttpException(400,"Admin not found")
             }
             res.json({
                 status: "success",
@@ -216,8 +218,6 @@ export const deleteAdminController = async (req, res, next) => {
         else {
             throw new HttpException(400,"Invalid request")
         }
-
-      
     } 
     catch (error) {
         next(error)
