@@ -13,8 +13,17 @@ import verifyAccountSchema from "../validator_schema/verifyAccountSchema";
 import loginSchema from "../validator_schema/loginSchema";
 import resetPasswordSchema from "../validator_schema/resetPasswordSchema";
 import resendVerificationSchema from "../validator_schema/resendVerificationSchema";
+import passport from "passport"
+import jwt from "jsonwebtoken";
+import { ACCESS_TOKEN } from "../config";
+
+
+
+require("../strategies/google.strategy")
+
 
 const userRouter = Router({ mergeParams: true });
+
 
 userRouter
     .route("/create")
@@ -22,6 +31,18 @@ userRouter
         validatorMiddleware(createAccountSchema, "body"),
         createAccount
     );
+ 
+userRouter
+    .route("/auth/google")
+    .get(passport.authenticate('google', { scope: ['profile', 'email', 'https://www.googleapis.com/auth/user.phonenumbers.read'], session: false }));
+
+userRouter.route('/auth/google/callback')
+    .get(passport.authenticate('google', { failureRedirect: '/login', session: false }), (req, res) => {
+        const accessToken = jwt.sign({ value: req.user._id }, ACCESS_TOKEN, {
+            expiresIn: "30d",
+        });
+        res.redirect(`http://127.0.0.1:1420/?token=${accessToken}`);
+    });
 
 userRouter
     .route("/verify")

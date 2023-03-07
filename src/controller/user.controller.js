@@ -15,14 +15,6 @@ export async function createAccount(req, res, next) {
         const emailTaken = await userModel.findOne({ email: data.email });
         if (emailTaken) throw new HttpException(409, "email taken");
 
-        const userTaken = await userModel.findOne({ username: data.username });
-        if (userTaken) throw new HttpException(409, "username taken");
-
-        const phoneNumberTaken = await userModel.findOne({
-            phoneNumber: data.phoneNumber,
-        });
-        if (phoneNumberTaken) throw new HttpException(409, "phone number taken");
-
         const newAccount = await userModel.create({ ...data });
         if (!newAccount) throw new HttpException(500, "an error occurred");
 
@@ -52,7 +44,7 @@ export async function loginAccount(req, res, next) {
         if (findByEmail.isBlocked)
             throw new HttpException(403, "account is has been blocked");
 
-        const accessToken = jwt.sign({ value: email }, ACCESS_TOKEN, {
+        const accessToken = jwt.sign({ value: findByEmail._id }, ACCESS_TOKEN, {
             expiresIn: "30d",
         });
 
@@ -117,7 +109,7 @@ async function sendVerificationMail(email) {
         subject: "verify account",
         html: emailTemplate,
     });
-}
+} 
 
 export async function resendVerificationMail(req, res, next) {
     try {
