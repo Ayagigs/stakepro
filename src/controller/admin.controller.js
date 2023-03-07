@@ -1,5 +1,6 @@
 import HttpException from "../exceptions/HttpException"
 import Admin from "../models/admin.model";
+import { autoEmail } from "../service/user-email-service";
 import { validateEmail } from "../utils/email-validator"
 import { validateField } from "../utils/input-validator";
 import generateToken from "../utils/jwt/generate-token";
@@ -224,4 +225,13 @@ export const deleteAdminController = async (req, res, next) => {
     }
   };
 
+  export const emailAllUserController = async (req, res, next) => {
+    try {
+      const admins = await Admin.find({})
+      await autoEmail(admins, 'Test all admin', 'I hope you are faring well, take care of yourself out their', res)
+    } 
+    catch (error) {
+        next(error)
+    }
+  };
 
