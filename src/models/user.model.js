@@ -9,13 +9,15 @@ const userSchema = new Schema({
         unique: true,
         lowercase: true
     },
-    googleId:String,
+    googleId: String,
     username: {
         type: String,
         required: true,
         lowercase: true,
         trim: true
     },
+    first_name: String,
+    last_name: String,
     password: {
         type: String,
         select: false,

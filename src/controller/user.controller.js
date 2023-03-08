@@ -7,6 +7,7 @@ import { ACCESS_TOKEN, WEB_URL } from "../config";
 import sendMail from "../utils/sendMail";
 import randomstring from "randomstring";
 import otpModel from "../models/otp.model";
+import geoip from "node-geoip"
 
 export async function createAccount(req, res, next) {
     try {
@@ -109,7 +110,7 @@ async function sendVerificationMail(email) {
         subject: "verify account",
         html: emailTemplate,
     });
-} 
+}
 
 export async function resendVerificationMail(req, res, next) {
     try {
@@ -179,6 +180,21 @@ export async function resetPassword(req, res, next) {
             .status(200)
             .send(new HttpResponse("success", "password reset"));
 
+    } catch (err) {
+        next(err);
+    }
+}
+
+
+export async function updateProfile(req, res, next) {
+    try {
+        const user = req["user"]
+        const data = req.body
+        const foundUser = await userModel.findOneAndUpdate({ _id: user._id }, { ...data })
+        await foundUser.save();
+        return res
+            .status(200)
+            .send(new HttpResponse("success", "profile updated"));
     } catch (err) {
         next(err);
     }
