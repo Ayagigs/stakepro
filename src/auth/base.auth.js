@@ -9,4 +9,4 @@ function hasToken(req) {
     return jwt.verify(token, ACCESS_TOKEN).value
 }
 
-export default hasToken
+export default hasToken;
