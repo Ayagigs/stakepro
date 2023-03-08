@@ -8,6 +8,7 @@ import sendMail from "../utils/sendMail";
 import randomstring from "randomstring";
 import otpModel from "../models/otp.model";
 import geoip from "node-geoip"
+import logger from "../utils/logger";
 
 export async function createAccount(req, res, next) {
     try {
@@ -31,6 +32,10 @@ export async function createAccount(req, res, next) {
 
 export async function loginAccount(req, res, next) {
     try {
+
+        const ipAddress = req.socket.remoteAddress;
+        logger.info(`[ip]==> ${ipAddress}`)
+
         const { password, email } = req.body;
         const findByEmail = await userModel.findOne({ email }).select("+password");
         if (!findByEmail)
