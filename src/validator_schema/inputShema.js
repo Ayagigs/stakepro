@@ -13,3 +13,9 @@ export const writeBlogSchema = Joi.object({
     title: Joi.string().required(),
     content: Joi.string().required()
 });
+
+export const updateBlogSchema = Joi.object({
+    displayname: Joi.string(),
+    title: Joi.string(),
+    content: Joi.string()
+});
