@@ -21,6 +21,21 @@ const userSchema = new Schema({
         required: true,
         select: false,
     },
+    phoneNumber: {
+        type: Number,
+        required: true,
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    isBlocked: {
+        type: Boolean,
+        default: false
+    },
+    dob: {
+        type: Date
+    },
     joinedAt: {
         type: Date,
         default: () => moment().toDate(),
