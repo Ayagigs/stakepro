@@ -4,7 +4,8 @@ import {
     loginAccount,
     resetPassword,
     sendResetPasswordMail,
-    verify
+    verify,
+    updateProfile
 } from "../controller/user.controller";
 import { Router } from "express";
 import validatorMiddleware from "../middleware/validator.middleware";
@@ -16,8 +17,8 @@ import resendVerificationSchema from "../validator_schema/resendVerificationSche
 import passport from "passport"
 import jwt from "jsonwebtoken";
 import { ACCESS_TOKEN } from "../config";
-
-
+import updateProfileSchema from "../validator_schema/updateProfileSchema"
+import { userAuth } from "../auth/user.auth";
 
 require("../strategies/google.strategy")
 
@@ -31,7 +32,7 @@ userRouter
         validatorMiddleware(createAccountSchema, "body"),
         createAccount
     );
- 
+
 userRouter
     .route("/auth/google")
     .get(passport.authenticate('google', { scope: ['profile', 'email', 'https://www.googleapis.com/auth/user.phonenumbers.read'], session: false }));
@@ -77,5 +78,12 @@ userRouter
         validatorMiddleware(resetPasswordSchema, "body"),
         resetPassword
     );
+    
+userRouter.route("/profile")
+    .put(
+        // userAuth,
+        validatorMiddleware(updateProfileSchema, "body"),
+        updateProfile
+    )
 
 export default userRouter;
