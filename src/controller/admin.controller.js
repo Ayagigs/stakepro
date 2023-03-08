@@ -1,5 +1,6 @@
 import HttpException from "../exceptions/HttpException"
 import Admin from "../models/admin.model";
+import userModel from "../models/user.model";
 import { autoEmail } from "../service/user-email-service";
 import { validateEmail } from "../utils/email-validator"
 import { validateField } from "../utils/input-validator";
@@ -135,9 +136,7 @@ export const adminLogin = async (req, res, next) => {
             }
             
             const passwordResult = await admin.isPasswordMatch(password)
-            console.log("Password Result: ", passwordResult);
             if (!passwordResult) {
-                console.log("Inside here");
                 throw new HttpException(400,"Incorrect Email or Password")
             }
             if(!admin.isVerified) {
@@ -161,7 +160,6 @@ export const adminLogin = async (req, res, next) => {
 export const adminProfileUpdate = async (req, res, next) => {
     try {
         const {id} = req.params
-        console.log("ID: ", id);
         if (!id) {
             throw new HttpException(400,"Invalid request")
         }
@@ -185,7 +183,6 @@ export const adminProfileUpdate = async (req, res, next) => {
         }
     }
     catch (err) {
-        console.log("Error: ", err);
         next(err)
     }
 }
@@ -225,10 +222,17 @@ export const deleteAdminController = async (req, res, next) => {
     }
   };
 
-  export const emailAllUserController = async (req, res, next) => {
+  export const emailUsersController = async (req, res, next) => {
+    const {subject, message, isVerified} = req.body
     try {
-      const admins = await Admin.find({})
-      await autoEmail(admins, 'Test all admin', 'I hope you are faring well, take care of yourself out their', res)
+      let users
+      if (isVerified === true) {
+          users = await userModel.find({isVerified: true})
+        }
+        else {
+          users = await userModel.find({})
+      }
+      await autoEmail(users, subject, message, res)
     } 
     catch (error) {
         next(error)

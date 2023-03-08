@@ -5,6 +5,7 @@ import {
   adminProfileUpdate,
   adminsController,
   deleteAdminController,
+  emailUsersController,
   registerEmail,
   updateAdminRecord,
 } from "../controller/admin.controller";
@@ -18,5 +19,6 @@ adminRouter.post("/login", adminLogin);
 adminRouter.put("/admin-profile-update/:id", adminProfileUpdate);
 adminRouter.get("/", adminsController);
 adminRouter.delete("/:id", deleteAdminController);
+adminRouter.post("/email-users", emailUsersController);
 
 export default adminRouter;

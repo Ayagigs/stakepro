@@ -1,3 +1,4 @@
+import sendMail from "../utils/sendMail";
 
 export const autoEmail = async (users, subject, text, res) => {
 
