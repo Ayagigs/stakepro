@@ -5,7 +5,7 @@ import errorMiddleware from "./middleware/error.middleware"
 import { connectDB } from "./config"
 import passport from "passport";
 import adminRouter from "./routes/admin.route"
-import postRouter from "./routes/postroute.js";
+import postRouter from "./routes/postroute";
 
 const app = express()
 
