@@ -5,7 +5,7 @@ import userModel from "../models/user.model";
 import ipinfo from "ipinfo"
 import { IPINFO_TOKEN } from "../config";
 import sendMail from "../utils/sendMail";
-
+import requestIp from "request-ip"
 
 export function googleStrategy() {
     passport.use(
@@ -36,7 +36,7 @@ export function googleStrategy() {
                             { new: true }
                         );
                     }
-                    const ipAddress = req.socket.remoteAddress;
+                    const ipAddress = requestIp.getClientIp(req)
 
                     const data = await ipinfo(ipAddress, { token: IPINFO_TOKEN });
 

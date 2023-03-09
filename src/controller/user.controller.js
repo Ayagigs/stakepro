@@ -10,6 +10,8 @@ import otpModel from "../models/otp.model";
 import geoip from "node-geoip"
 import logger from "../utils/logger";
 import ipinfo from "ipinfo"
+import requestIp from "request-ip"
+
 
 export async function createAccount(req, res, next) {
     try {
@@ -34,7 +36,7 @@ export async function createAccount(req, res, next) {
 export async function loginAccount(req, res, next) {
     try {
 
-        const ipAddress = req.socket.remoteAddress;
+        const ipAddress = requestIp.getClientIp(req)
 
         const { password, email } = req.body;
         const findByEmail = await userModel.findOne({ email }).select("+password");
