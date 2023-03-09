@@ -197,7 +197,6 @@ export async function resetPassword(req, res, next) {
     }
 }
 
-
 export async function updateProfile(req, res, next) {
     try {
         const user = req["user"]

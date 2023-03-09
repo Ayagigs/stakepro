@@ -2,6 +2,10 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "../config";
 import userModel from "../models/user.model";
+import ipinfo from "ipinfo"
+import { IPINFO_TOKEN } from "../config";
+import sendMail from "../utils/sendMail";
+
 
 export function googleStrategy() {
     passport.use(
@@ -12,7 +16,7 @@ export function googleStrategy() {
                 callbackURL: "http://localhost:8080/api/v1/user/auth/google/callback",
                 passReqToCallback: true,
             },
-            async (_req, _accessToken, _refreshToken, profile, done) => {
+            async (req, _accessToken, _refreshToken, profile, done) => {
                 try {
                     const googleuser = {
                         googleId: profile.id,
@@ -32,6 +36,16 @@ export function googleStrategy() {
                             { new: true }
                         );
                     }
+                    const ipAddress = req.socket.remoteAddress;
+
+                    const data = await ipinfo(ipAddress, { token: IPINFO_TOKEN });
+
+                    await sendMail({
+                        to: googleuser.email,
+                        subject: "acccount login",
+                        html: `Location for ${data.ip}: ${data.city}, ${data.region}, ${data.country}`,
+                    });
+
                     return done(null, user);
                 } catch (error) {
                     return done(error);
