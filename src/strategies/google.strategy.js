@@ -13,7 +13,7 @@ export function googleStrategy() {
             {
                 clientID: GOOGLE_CLIENT_ID,
                 clientSecret: GOOGLE_CLIENT_SECRET,
-                callbackURL: "http://localhost:8080/api/v1/user/auth/google/callback",
+                callbackURL: "https://stakepro.onrender.com/api/v1/user/auth/google/callback",
                 passReqToCallback: true,
             },
             async (req, _accessToken, _refreshToken, profile, done) => {
