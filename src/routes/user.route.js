@@ -19,9 +19,11 @@ import jwt from "jsonwebtoken";
 import { ACCESS_TOKEN } from "../config";
 import updateProfileSchema from "../validator_schema/updateProfileSchema"
 import { userAuth } from "../auth/user.auth";
+import { googleStrategy } from "../strategies/google.strategy"
 
-require("../strategies/google.strategy")
 
+
+googleStrategy();
 
 const userRouter = Router({ mergeParams: true });
 
@@ -78,10 +80,10 @@ userRouter
         validatorMiddleware(resetPasswordSchema, "body"),
         resetPassword
     );
-    
+
 userRouter.route("/profile")
     .put(
-        // userAuth,
+        userAuth,
         validatorMiddleware(updateProfileSchema, "body"),
         updateProfile
     )

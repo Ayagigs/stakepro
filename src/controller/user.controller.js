@@ -3,16 +3,17 @@ import userModel from "../models/user.model";
 import jwt from "jsonwebtoken";
 import emailTemplateReader from "../utils/emailTemplateReader";
 import HttpResponse from "../response/HttpResponse";
-import { ACCESS_TOKEN, WEB_URL } from "../config";
+import { ACCESS_TOKEN, WEB_URL, IPINFO_TOKEN } from "../config";
 import sendMail from "../utils/sendMail";
 import randomstring from "randomstring";
 import otpModel from "../models/otp.model";
 import geoip from "node-geoip"
 import logger from "../utils/logger";
+import ipinfo from "ipinfo"
 
 export async function createAccount(req, res, next) {
     try {
-      
+
         const data = req.body;
         const emailTaken = await userModel.findOne({ email: data.email });
         if (emailTaken) throw new HttpException(409, "email taken");
@@ -34,7 +35,13 @@ export async function loginAccount(req, res, next) {
     try {
 
         const ipAddress = req.socket.remoteAddress;
-        logger.info(`[ip]==> ${ipAddress}`)
+        const data = await ipinfo(ipAddress, { token: IPINFO_TOKEN });
+        await sendMail({
+            to: email,
+            subject: "verify account",
+            html: `Location for ${data.ip}: ${data.city}, ${data.region}, ${data.country}`,
+        });
+
 
         const { password, email } = req.body;
         const findByEmail = await userModel.findOne({ email }).select("+password");
