@@ -35,13 +35,6 @@ export async function loginAccount(req, res, next) {
     try {
 
         const ipAddress = req.socket.remoteAddress;
-        const data = await ipinfo(ipAddress, { token: IPINFO_TOKEN });
-        await sendMail({
-            to: email,
-            subject: "verify account",
-            html: `Location for ${data.ip}: ${data.city}, ${data.region}, ${data.country}`,
-        });
-
 
         const { password, email } = req.body;
         const findByEmail = await userModel.findOne({ email }).select("+password");
@@ -59,6 +52,13 @@ export async function loginAccount(req, res, next) {
 
         const accessToken = jwt.sign({ value: findByEmail._id }, ACCESS_TOKEN, {
             expiresIn: "30d",
+        });
+
+        const data = await ipinfo(ipAddress, { token: IPINFO_TOKEN });
+        await sendMail({
+            to: email,
+            subject: "acccount login",
+            html: `Location for ${data.ip}: ${data.city}, ${data.region}, ${data.country}`,
         });
 
         return res
