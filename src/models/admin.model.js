@@ -16,6 +16,12 @@ const adminSchema = new mongoose.Schema({
         lowercase: true,
         trim: true,
     },
+    firstname: {
+        type: String,
+    },
+    lastname: {
+        type: String,
+    },
     password: {
         type: String,
         // select: false,
@@ -48,5 +54,5 @@ adminSchema.methods.isPasswordMatch = async function (password) {
     return await bcrypt.compare(password, this.password);
 };
 
-const Admin = mongoose.model("Admin5", adminSchema);
+const Admin = mongoose.model("Admin", adminSchema);
 export default Admin;
