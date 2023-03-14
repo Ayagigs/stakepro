@@ -7,7 +7,6 @@ const createAccountSchema = Joi.object({
     password: Joi.string().required(),
     // phoneNumber: Joi.string().pattern(/^\+?[1-9]\d{1,14}$/) // pattern for phone number validation
     //     .required()
-
 })
 
 export default createAccountSchema

@@ -25,6 +25,7 @@ export function googleStrategy() {
                         last_name: profile._json.given_name,
                         first_name: profile._json.family_name,
                         picture: profile._json.picture,
+                        isVerified:true
                     };
 
                     let user = await userModel.findOne({ email: googleuser.email });

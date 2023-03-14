@@ -5,13 +5,9 @@ import { Schema, model } from "mongoose";
 const otpSchema = new Schema({
     otp: {
         type: String,
-        required: true,
-        unique: true,
     },
     key: {
         type: String,
-        required: true,
-        unique: true,
     },
     addedAt: {
         type: Date,
