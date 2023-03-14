@@ -7,3 +7,4 @@ const createAccount = async (req, res, next) => {
 }
 
 export { createAccount }
+
