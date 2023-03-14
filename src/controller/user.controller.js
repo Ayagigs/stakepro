@@ -3,7 +3,7 @@ import userModel from "../models/user.model";
 import jwt from "jsonwebtoken";
 import emailTemplateReader from "../utils/emailTemplateReader";
 import HttpResponse from "../response/HttpResponse";
-import { ACCESS_TOKEN, WEB_URL, IPINFO_TOKEN } from "../config";
+import { ACCESS_TOKEN, WEB_URL, IPINFO_TOKEN, nexmo } from "../config";
 import sendMail from "../utils/sendMail";
 import randomstring from "randomstring";
 import otpModel from "../models/otp.model";
@@ -104,7 +104,7 @@ async function sendVerificationMail(email) {
     });
 
     const OTP = randomstring.generate({
-        length: 6,
+        length: 4,
         charset: "numeric",
     });
 
@@ -199,6 +199,27 @@ export async function resetPassword(req, res, next) {
     }
 }
 
+export async function getProfile(req, res, next) {
+    try {
+        const { email, username, first_name, last_name, phoneNumber, isVerified, isBlocked, address, isKycVerified } = req["user"]
+        return res
+            .status(200)
+            .send(new HttpResponse("success", `${email} profile`, {
+                email,
+                username,
+                first_name,
+                last_name,
+                phoneNumber,
+                isEmailVerified: isVerified,
+                isBlocked,
+                address,
+                isKycVerified
+            }));
+    } catch (err) {
+        next(err);
+    }
+}
+
 export async function updateProfile(req, res, next) {
     try {
         const user = req["user"]
@@ -211,4 +232,96 @@ export async function updateProfile(req, res, next) {
     } catch (err) {
         next(err);
     }
+}
+
+export async function uploadImg(req, res, next) {
+    try {
+        if (!req.file) throw new HttpException(400, "field is required")
+        return res.status(200).send(new HttpResponse("success", "image uploaded", { url: req.file.path }));
+    } catch (err) {
+        next(err)
+    }
+}
+
+export async function kycOtp(req, res, next) {
+    try {
+        const { mobile } = req.body
+
+        const verificationToken = jwt.sign({ value: mobile }, ACCESS_TOKEN, {
+            expiresIn: "5m",
+        });
+
+        const OTP = randomstring.generate({
+            length: 4,
+            charset: "numeric",
+        });
+
+        nexmo.message.sendSms(
+            "Stakepro",
+            mobile,
+            `Verification otp\n ${OTP}`,
+            async (err, responseData) => {
+                try {
+                    logger.error(err);
+                    if (err) throw new HttpException(500, "otp could not be sent");
+                    logger.info("responseData==> " + responseData)
+                    const addedOtp = await otpModel.create({
+                        key: verificationToken,
+                        otp: OTP,
+                    });
+                    if (!addedOtp) throw new HttpException(500, "otp could not be sent");
+                    return res.status(200).send(new HttpResponse("success", "otp resent"));
+                } catch (err) {
+                    next(err)
+                }
+            }
+        )
+
+    } catch (err) {
+        next(err)
+    }
+}
+
+export async function verifyKycOtp(req, res, next) {
+    try {
+        const { otp } = req.body;
+        const user = req["user"]
+
+        const confirmedOtp = await otpModel.findOne({ otp });
+        if (!confirmedOtp) throw new HttpException(400, "invalid otp");
+
+        const decoded = jwt.decode(confirmedOtp.key, { complete: true });
+        const { exp, value } = decoded.payload;
+
+        const currentTime = Math.floor(Date.now() / 1000);
+        if (currentTime >= exp) throw new HttpException(401, "otp has expired");
+
+        user.phoneNumber = value;
+        await user.save();
+
+        return res.status(200).send(new HttpResponse("success", "otp verified successfully"));
+    } catch (err) {
+        next(err)
+    }
+}
+
+export async function kycCredentials(req, res, next) {
+    try {
+        const data = req.body
+        const { email, phoneNumber } = req["user"]
+        if (!phoneNumber) throw new HttpException(400, "verify phone number");
+
+        const updatedUser = await userModel.findOneAndUpdate(
+            { email },
+            { ...data, isKycVerified: true },
+            { new: true }
+        );
+        if (updatedUser) return res.status(200).send(new HttpResponse("success", "done with kyc successfully"));
+    } catch (err) {
+        next(err)
+    }
+}
+
+export async function logout(req, res, next) {
+
 }

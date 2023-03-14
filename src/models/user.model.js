@@ -36,6 +36,22 @@ const userSchema = new Schema({
     dob: {
         type: Date
     },
+    address: {
+        postalCode: {
+            type: String,
+        },
+        city: {
+            type: String,
+        },
+        address: {
+            type: String,
+        }
+    },
+    verifiedSelfie: String,
+    isKycVerified: {
+        type: Boolean,
+        default: false
+    },
     joinedAt: {
         type: Date,
         default: () => moment().toDate(),
