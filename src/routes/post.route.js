@@ -1,5 +1,5 @@
 import express from "express";
-import { writeBlog, deleteBlog, updateBlog, getAllBlogs } from "../controller/postcontroller.js";
+import { writeBlog, deleteBlog, updateBlog, getAllBlogs } from "../controller/post.controller.js";
 import validatorMiddleware from "../middleware/validator.middleware.js";
 import {writeBlogSchema, updateBlogSchema} from "../validator_schema/inputShema.js";
 import checkToken from "../auth/authentication.js";

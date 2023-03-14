@@ -314,7 +314,7 @@ export async function kycCredentials(req, res, next) {
         const updatedUser = await userModel.findOneAndUpdate(
             { email },
             { ...data, isKycVerified: true },
-            { new: true }
+            { new: true } 
         );
         if (updatedUser) return res.status(200).send(new HttpResponse("success", "done with kyc successfully"));
     } catch (err) {

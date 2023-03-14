@@ -14,20 +14,15 @@ import {
 } from "../controller/user.controller";
 import { Router } from "express";
 import validatorMiddleware from "../middleware/validator.middleware";
-import createAccountSchema from "../validator_schema/createAccountShema";
-import verifyAccountSchema from "../validator_schema/verifyAccountSchema";
-import verifyKycOtpSchema from "../validator_schema/verifyKycOtpSchema";
-import loginSchema from "../validator_schema/loginSchema";
-import resetPasswordSchema from "../validator_schema/resetPasswordSchema";
-import resendVerificationSchema from "../validator_schema/resendVerificationSchema";
-import kycCredentialSchema from "../validator_schema/kycCredentialSchema";
+import { createAccountSchema, loginSchema, resendVerificationSchema, resetPasswordSchema, verifyAccountSchema } from "../validator_schema/authSchema"
+import { kycCredentialSchema, kycOtpSchema, verifyKycOtpSchema } from "../validator_schema/kycSchema"
+
 import passport from "passport"
 import jwt from "jsonwebtoken";
 import { ACCESS_TOKEN, fileParser } from "../config";
-import updateProfileSchema from "../validator_schema/updateProfileSchema"
+import { updateProfileSchema } from "../validator_schema/userProfileSchema"
 import { userAuth } from "../auth/user.auth";
 import { googleStrategy } from "../strategies/google.strategy"
-import kycOtpSchema from "../validator_schema/kycOtpSchema";
 
 
 googleStrategy();
