@@ -6,6 +6,8 @@ import { connectDB, PORT } from "./config"
 import passport from "passport";
 import adminRouter from "./routes/admin.route"
 import postRouter from "./routes/postroute";
+import newsRouter from "./routes/newsletterroute.js";
+import supportRouter from "./routes/supportroute.js";
 
 
 const app = express()
@@ -22,10 +24,11 @@ app.use(passport.initialize());
 app.use(`${path}/user`, userRouter)
 app.use(`${path}/admin`, adminRouter)
 app.use (`${path}/post`, postRouter);
+app.use (`${path}`, newsRouter)
+app.use (`${path}/support`, supportRouter)
 app.use(`${path}/faq`, faqRouter)
-
 
 
 app.use(errorMiddleware)
 
-app.listen(port, () => console.log(`🐉 server running of port ${port} 🐉`))
+app.listen(port, () => console.log(`🐉 server running of port ${port} 🐉`));
