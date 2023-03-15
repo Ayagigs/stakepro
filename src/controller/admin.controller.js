@@ -2,6 +2,8 @@ import HttpException from "../exceptions/HttpException"
 import HttpResponse from "../response/HttpResponse";
 import Admin from "../models/admin.model";
 import { ACCESS_TOKEN } from "../config";
+import userModel from "../models/user.model";
+import { autoEmail } from "../service/user-email-service";
 import sendMail from "../utils/sendMail";
 import jwt from "jsonwebtoken";
 
