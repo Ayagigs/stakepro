@@ -1,11 +1,6 @@
 import HttpException from "../exceptions/HttpException"
 import HttpResponse from "../response/HttpResponse";
 import Admin from "../models/admin.model";
-import { validateEmail } from "../utils/email-validator"
-import { validateField } from "../utils/input-validator";
-import generateToken from "../utils/jwt/generate-token";
-import { extractEmailFromToken } from "../utils/jwt/verify-token";
-import { passwordValidator } from "../utils/password-validator";
 import { ACCESS_TOKEN } from "../config";
 import sendMail from "../utils/sendMail";
 import jwt from "jsonwebtoken";
@@ -67,7 +62,7 @@ export const updateAdminRecord = async (req, res, next) => {
         if (!admin) throw new HttpException(404, "email not registered")
 
         admin.username = username
-        admin.password = password 
+        admin.password = password
         admin.isAccepted = true
         await admin.save();
 
@@ -114,13 +109,93 @@ export const adminLogin = async (req, res, next) => {
 
         if (!admin.isVerified) throw new HttpException(403, "Unverified account")
 
-        return res.json({
-            status: "success",
-            message: `Dear ${admin.username}, welcome to the admin dashboard`,
-        });
+        return res
+            .status(200)
+            .send(new HttpResponse("success", `Dear ${admin.username}, welcome to the admin dashboard`));
 
     } catch (err) {
         next(err)
     }
 }
 
+export const adminProfileUpdate = async (req, res, next) => {
+    try {
+        const { id } = req.params
+        if (!id) {
+            throw new HttpException(400, "Invalid request")
+        }
+        else {
+            const { firstname, lastname } = req.body
+            const admin = await Admin.findOneAndUpdate(
+                { _id: id },
+                { firstname: firstname, lastname: lastname },
+                { new: true, runValidators: true }
+            )
+
+            if (!admin) {
+                throw new HttpException(400, "Admin not found")
+            }
+
+            return res
+                .status(200)
+                .send(new HttpResponse("success", `Dear ${admin.firstname}, your account has now been updated.`));
+
+        }
+    }
+    catch (err) {
+        next(err)
+    }
+}
+
+export const adminsController = async (req, res, next) => {
+    try {
+        const admins = await Admin.find({})
+
+        return res
+            .status(200)
+            .send(new HttpResponse("success", `fetched all admin successfully`, admins));
+
+    }
+    catch (error) {
+        next(error)
+    }
+};
+
+export const deleteAdminController = async (req, res, next) => {
+    const id = req.params.id;
+    try {
+        if (id) {
+            const admin = await Admin.findOneAndDelete({ _id: id })
+            if (!admin) {
+                throw new HttpException(400, "Admin not found")
+            }
+            res.json({
+                status: "success",
+                message: "Account has been deleted successfully",
+            });
+        }
+        else {
+            throw new HttpException(400, "Invalid request")
+        }
+    }
+    catch (error) {
+        next(error)
+    }
+};
+
+export const emailUsersController = async (req, res, next) => {
+    const { subject, message, isVerified } = req.body
+    try {
+        let users
+        if (isVerified === true) {
+            users = await userModel.find({ isVerified: true })
+        }
+        else {
+            users = await userModel.find({})
+        }
+        await autoEmail(users, subject, message, res)
+    }
+    catch (error) {
+        next(error)
+    }
+};
