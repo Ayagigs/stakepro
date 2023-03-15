@@ -1,4 +1,4 @@
-import HttpException from "../exceptions/HttpException";
+import HttpException from "../exceptions/HttpException"; 
 import userModel from "../models/user.model";
 import jwt from "jsonwebtoken";
 import emailTemplateReader from "../utils/emailTemplateReader";

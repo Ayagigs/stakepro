@@ -14,7 +14,7 @@ import {
 } from "../controller/user.controller";
 import { Router } from "express";
 import validatorMiddleware from "../middleware/validator.middleware";
-import { createAccountSchema, loginSchema, resendVerificationSchema, resetPasswordSchema, verifyAccountSchema } from "../validator_schema/authSchema"
+import { createAccountSchema, loginSchema, resendVerificationSchema, resetPasswordSchema, verifyAccountSchema } from "../validator_schema/userAuthSchema"
 import { kycCredentialSchema, kycOtpSchema, verifyKycOtpSchema } from "../validator_schema/kycSchema"
 
 import passport from "passport"

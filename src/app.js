@@ -8,6 +8,7 @@ import adminRouter from "./routes/admin.route"
 import postRouter from "./routes/post.route";
 // import newsRouter from "./routes/newsletter.route.js";
 import supportRouter from "./routes/support.route.js";
+import cors from "cors";
 
 
 const app = express()
@@ -16,6 +17,7 @@ const port = PORT || 8080
 const path = "/api/v1"
 connectDB()
 
+app.use(cors({origin: '*', credentials: true}));
 app.use(express.json())
 app.use(passport.initialize());
 
