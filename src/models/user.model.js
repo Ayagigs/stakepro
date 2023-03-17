@@ -9,17 +9,48 @@ const userSchema = new Schema({
         unique: true,
         lowercase: true
     },
+    googleId: String,
     username: {
         type: String,
         required: true,
-        unique: true,
         lowercase: true,
         trim: true
     },
+    first_name: String,
+    last_name: String,
     password: {
         type: String,
-        required: true,
         select: false,
+    },
+    phoneNumber: {
+        type: String,
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    isBlocked: {
+        type: Boolean,
+        default: false
+    },
+    dob: {
+        type: Date
+    },
+    address: {
+        postalCode: {
+            type: String,
+        },
+        city: {
+            type: String,
+        },
+        address: {
+            type: String,
+        }
+    },
+    verifiedSelfie: String,
+    isKycVerified: {
+        type: Boolean,
+        default: false
     },
     joinedAt: {
         type: Date,
