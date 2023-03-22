@@ -20,7 +20,7 @@ export const registerEmail = async (req, res, next) => {
         });
 
         const mailOption = {
-            to: email,
+            to: email, 
             subject: 'Admin account registration',
             text: `Dear ${email}, kindly follow this link in order to continue with your registration process as an admin!\n
                 "http://localhost:8080/api/v1/admin/admin-registration-continuation?email=${email}&token=${token}"`

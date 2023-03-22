@@ -7,7 +7,6 @@ import { ACCESS_TOKEN, WEB_URL, IPINFO_TOKEN, nexmo } from "../config";
 import sendMail from "../utils/sendMail";
 import randomstring from "randomstring";
 import otpModel from "../models/otp.model";
-import geoip from "node-geoip"
 import logger from "../utils/logger";
 import ipinfo from "ipinfo"
 import requestIp from "request-ip"
