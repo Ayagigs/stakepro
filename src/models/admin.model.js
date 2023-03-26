@@ -25,6 +25,11 @@ const adminSchema = new mongoose.Schema({
         type: String,
         // select: false,
     },
+    roles: {
+        type: String,
+        enum: ["ADMIN", "SUPERADMIN"],
+        default: "ADMIN"
+    },
     isVerified: {
         type: Boolean,
         default: false,
@@ -53,5 +58,5 @@ adminSchema.methods.isPasswordMatch = async function (password) {
     return await bcrypt.compare(password, this.password);
 };
 
-const Admin = mongoose.model("Admin7", adminSchema);
+const Admin = mongoose.model("Admin9", adminSchema);
 export default Admin;

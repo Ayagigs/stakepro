@@ -5,6 +5,7 @@ import { connectDB } from "./config"
 import adminRouter from "./routes/admin.route"
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc"
+// import path from 'path'
 
 
 const options = {
@@ -28,14 +29,15 @@ const swaggerSpec = swaggerJSDoc(options)
 const app = express() 
 
 const port = 8080
-const path = "/api/v1"
+const pathUrl = "/api/v1"
 connectDB()
 
 app.use(express.json())
+// app.use(express.static(path.join(__dirname, './public')))
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
 // add routes here
-app.use(`${path}/user`, userRouter)
+app.use(`${pathUrl}/user`, userRouter)
 
 /**
  * @swagger
@@ -43,7 +45,7 @@ app.use(`${path}/user`, userRouter)
  * get:
  * 
  */
-app.use(`${path}/admin`, adminRouter)
+app.use(`${pathUrl}/admin`, adminRouter)
 
 
 

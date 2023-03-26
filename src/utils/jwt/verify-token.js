@@ -8,8 +8,15 @@ export const verifyToken = token => {
 }
 
 export const extractEmailFromToken = (token, email) => {
-    const extractedEmail = verifyToken(token);
-    console.log("Extracted: ", extractedEmail);
-    console.log("Extracted Email: ", extractedEmail.email);
-    return extractedEmail.email == email
+    const extractedSubject = verifyToken(token);
+    console.log("Extracted: ", extractedSubject);
+    console.log("Extracted Email: ", extractedSubject.email);
+    return extractedSubject.email == email
+}
+
+export const extractRoleFromToken = (token, role) => {
+    const extractedSubject = verifyToken(token);
+    console.log("Extracted: ", extractedSubject);
+    console.log("Extracted Role: ", extractedSubject.role);
+    return extractedSubject.role == role
 }
