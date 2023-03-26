@@ -1,8 +1,4 @@
-import { getTokenFromHeader } from "../../utils/jwt/get-token";
-import { verifyToken } from "../../utils/jwt/verify-token";
-
-
-export const isAdminLoggedIn = (req, res, next) => {
+export const hasAccess = (req, res, next) => {
     // get token from header
     const token = getTokenFromHeader(req)
     if(!token) return res.json({
@@ -11,13 +7,14 @@ export const isAdminLoggedIn = (req, res, next) => {
     })
 
     const decodedUser = verifyToken(token);
-    if (!decodedUser) {
+    req.role = decodedUser.role
+
+    if (!decodedUser || decodedUser.role !== 'SUPERADMIN') {
         return res.json({
             status: "error",
-            message: "Invalid token passed! Kindly login to generate new token thank you."
+            message: "you do not have access to this endpoint."
         })
         
     }
-    req.adminEmail = decodedUser.email
         next();
 }
