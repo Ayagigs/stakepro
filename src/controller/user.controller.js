@@ -1,4 +1,4 @@
-import HttpException from "../exceptions/HttpException"; 
+import HttpException from "../exceptions/HttpException";
 import userModel from "../models/user.model";
 import jwt from "jsonwebtoken";
 import emailTemplateReader from "../utils/emailTemplateReader";
@@ -24,9 +24,13 @@ export async function createAccount(req, res, next) {
 
         await sendVerificationMail(data.email);
 
+        const accessToken = jwt.sign({ value: newAccount._id }, ACCESS_TOKEN, {
+            expiresIn: "30d",
+        });
+
         return res
             .status(200)
-            .send(new HttpResponse("success", "account created successfully"));
+            .send(new HttpResponse("success", "account created successfully", { accessToken, kycVerified: false }));
     } catch (err) {
         next(err);
     }
@@ -46,7 +50,7 @@ export async function loginAccount(req, res, next) {
             throw new HttpException(404, "incorrect username or email, and password");
 
         if (!findByEmail.isVerified)
-            throw new HttpException(403, "account is not verified");
+            throw new HttpException(403, "email is not verified");
 
         if (findByEmail.isBlocked)
             throw new HttpException(403, "account is has been blocked");
@@ -65,7 +69,7 @@ export async function loginAccount(req, res, next) {
         return res
             .status(200)
             .send(
-                new HttpResponse("success", "account authenticated", { accessToken })
+                new HttpResponse("success", "account authenticated", { accessToken, kycVerified: findByEmail.isKycVerified })
             );
     } catch (err) {
         next(err);
@@ -86,6 +90,7 @@ export async function verify(req, res, next) {
         if (currentTime >= exp) throw new HttpException(401, "otp has expired");
 
         const user = await userModel.findOne({ email: value });
+        if (user.isVerified) throw new HttpException(400, "account already verified");
         user.isVerified = true;
         await user.save();
 
@@ -238,6 +243,9 @@ export async function uploadImg(req, res, next) {
         if (!req.file) throw new HttpException(400, "field is required")
         return res.status(200).send(new HttpResponse("success", "image uploaded", { url: req.file.path }));
     } catch (err) {
+        console.log(err)
+        console.log(req.file)
+
         next(err)
     }
 }
@@ -297,7 +305,6 @@ export async function verifyKycOtp(req, res, next) {
 
         user.phoneNumber = value;
         await user.save();
-
         return res.status(200).send(new HttpResponse("success", "otp verified successfully"));
     } catch (err) {
         next(err)
@@ -313,7 +320,7 @@ export async function kycCredentials(req, res, next) {
         const updatedUser = await userModel.findOneAndUpdate(
             { email },
             { ...data, isKycVerified: true },
-            { new: true } 
+            { new: true }
         );
         if (updatedUser) return res.status(200).send(new HttpResponse("success", "done with kyc successfully"));
     } catch (err) {

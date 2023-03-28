@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose"
+import moment from "moment";
 
 const faqSchema = new Schema({
     question: {
@@ -12,7 +13,6 @@ const faqSchema = new Schema({
 
     addedBy: {
         type: String,
-        required: true
     },
 
     createdAt: {

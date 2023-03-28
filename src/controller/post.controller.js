@@ -9,10 +9,10 @@ export const writeBlog = async (req, res) => {
         const blogPoster = await userModel.findById(req.userAuth);
 
         await Post.create({
-            displayname,
+            displayname, 
             title,
             content,
-            user: blogPoster._id
+            admin: blogPoster._id
         });
 
         return res.status(201).send(new HttpResponse("success", "your blog has been posted successfully"))

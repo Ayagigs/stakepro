@@ -10,7 +10,7 @@ export const createAccountSchema = Joi.object({
 })
 
 export const verifyAccountSchema = Joi.object({
-    otp: Joi.number().min(1000).max(9999).required(),
+    otp: Joi.string().min(4).max(4)
 })
 
 export const loginSchema = Joi.object({

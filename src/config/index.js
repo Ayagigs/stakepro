@@ -46,9 +46,9 @@ const parser = multer({ storage: storage });
 const nexmo = new Nexmo({
     apiKey: process.env.NEXMO_KEY,
     apiSecret: process.env.NEXMO_SECRET,
-  });
-  
-export {cloudinary, parser as fileParser, nexmo }
+});
+
+export { cloudinary, parser as fileParser, nexmo }
 
 export const {
     MONGODB_URI,
@@ -60,5 +60,7 @@ export const {
     GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET,
     IPINFO_TOKEN,
-    PORT
+    PORT,
+    CALLBACK_URL,
+    FRONTEND_URL
 } = process.env;

@@ -14,19 +14,14 @@ const blogSchema = new mongoose.Schema({
         type:String,
         required:[true,"write content"]
     },
-    postviews: [{
+    admin: {
         type:mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    }],
-
-    user: [{
-        type:mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    }],
-    photo: [{
+        ref: "Admin"
+    },
+    photo: {
         type:String,
-
-    }]
+        required:true,
+    }
 }, {
     timestamps:true,
     toJSON:{virtuals:true}
