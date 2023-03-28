@@ -14,7 +14,7 @@ import { hasSuperadminAccess } from "../middleware/auth/superadmin-has-access";
 
 const adminRouter = express.Router();
 
-adminRouter.post("/admin-register-email", registerEmail);
+adminRouter.post("/admin-register-email", isAdminLoggedIn, hasSuperadminAccess, registerEmail);
 adminRouter.put("/admin-registration-continuation", updateAdminRecord);
 adminRouter.patch("/admin-activation/:id", isAdminLoggedIn, hasSuperadminAccess, activateAdmin);
 adminRouter.post("/login", adminLogin);

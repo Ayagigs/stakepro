@@ -34,7 +34,6 @@ export const registerEmail = async (req, res, next) => {
               return res.json({
                 status: "success",
                 message: "A registration link has been successfully sent to your email, kindly continue your registration from there.",
-                token: token
               });
         }
         else {
