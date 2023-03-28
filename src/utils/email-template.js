@@ -17,22 +17,23 @@ export function htmlTemplate(baseUrl, email, token) {
         padding: 10px;
     }
 
-    .btn1 {
+    .btn {
         padding: 15px 15px;
-        background-color: rgb(129, 9, 248);
+        background-color: rgb(9, 129, 248);
         color: white;
-        border-radius: 15px;
+        border-radius: 8px;
         text-decoration: none;
+        font-size: 20px;
     }
 </style>
   </head>
   <body>
-  <div class="container text-center">
+  <div class="container">
     Dear <h1>${email},</h1>
         <br/>
         <p class="lead">
-            kindly follow this link in order to continue with your registration process as an admin!
-            <a class="btn btn-primary btn1 btn-lg" href="${baseUrl}/api/v1/admin/admin-registration-continuation?email=${email}&token=${token}"> Activate your account</a>
+            kindly follow this link in order to continue with your registration process as an admin! <br/>
+            <a class="btn" href="${baseUrl}/api/v1/admin/admin-registration-continuation?email=${email}&token=${token}"> Activate your account</a>
         </p>
     </div>
   </body>
