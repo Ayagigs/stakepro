@@ -6,7 +6,7 @@ import { htmlTemplate } from "../utils/email-template";
 import { validateEmail } from "../utils/email-validator"
 import { validateField } from "../utils/input-validator";
 import generateToken from "../utils/jwt/generate-token";
-import { extractEmailFromToken } from "../utils/jwt/verify-token";
+import { extractEmailAndRoleFromToken} from "../utils/jwt/verify-token";
 import { passwordValidator } from "../utils/password-validator";
 import sendMail from "../utils/sendMail";
 
@@ -18,7 +18,7 @@ export const registerEmail = async (req, res, next) => {
             if (existingAdmin) {
                 throw new HttpException(400,"Email already exists, kindly login")
             }
-            const token = generateToken(email)
+            const token = generateToken(email, 'ADMIN')
             const mailOption = {
                 from: process.env.MAIL_USER,
                 to: email,
@@ -51,7 +51,7 @@ export const updateAdminRecord = async (req, res, next) => {
         const {email, token} = req.query
 
         if (email && token) {
-            if (!extractEmailFromToken(token, email)) {
+            if (!extractEmailAndRoleFromToken(token, email, 'ADMIN')) {
                 throw new HttpException(400,"Invalid or expired token")
             }
             const admin = await Admin.findOne({email})
@@ -146,6 +146,7 @@ export const adminLogin = async (req, res, next) => {
             return res.json({
                 status: "success",
                 message: `Dear ${admin.username}, welcome to the admin dashboard`,
+                token: generateToken(admin.email, admin.roles)
                 });
             
         }

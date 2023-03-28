@@ -7,11 +7,11 @@ export const verifyToken = token => {
     })
 }
 
-export const extractEmailFromToken = (token, email) => {
+export const extractEmailAndRoleFromToken = (token, email, role) => {
     const extractedSubject = verifyToken(token);
     console.log("Extracted: ", extractedSubject);
     console.log("Extracted Email: ", extractedSubject.email);
-    return extractedSubject.email == email
+    return extractedSubject.email == email && extractedSubject.role == role
 }
 
 export const extractRoleFromToken = (token, role) => {

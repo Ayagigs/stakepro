@@ -1,4 +1,4 @@
-export const hasAccess = (req, res, next) => {
+export const hasSuperadminAccess = (req, res, next) => {
     // get token from header
     const token = getTokenFromHeader(req)
     if(!token) return res.json({
