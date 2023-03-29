@@ -19,12 +19,15 @@ import {
     activateAdminSchema
 } from "../validator_schema/adminAuthSchema";
 
+import { isAdminLoggedIn } from "../middleware/auth/is-admin-logged-in";
+import { hasSuperadminAccess } from "../middleware/auth/superadmin-has-access";
+
 
 const adminRouter = express.Router();
 
 adminRouter
     .route("/admin-register-email")
-    .post(validatorMiddleware(registerEmailSchema, "body"), registerEmail);
+    .post(validatorMiddleware(registerEmailSchema, "body"), isAdminLoggedIn, registerEmail);
 
 adminRouter
     .route("/admin-registration-continuation")
@@ -36,7 +39,7 @@ adminRouter
 
 adminRouter
     .route("/admin-activation/:id")
-    .patch(validatorMiddleware(activateAdminSchema, "params"), activateAdmin);
+    .patch(validatorMiddleware(activateAdminSchema, "params"), isAdminLoggedIn, hasSuperadminAccess, activateAdmin);
 
 adminRouter
     .route("/login")
@@ -44,16 +47,16 @@ adminRouter
 
 adminRouter
     .route("/admin-profile-update/:id")
-    .put(adminProfileUpdate);
+    .put(isAdminLoggedIn, adminProfileUpdate);
 
 adminRouter
     .route("/")
-    .get(adminsController);
+    .get(isAdminLoggedIn, hasSuperadminAccess, adminsController);
 adminRouter
     .route("/:id")
-    .delete(deleteAdminController);
+    .delete(isAdminLoggedIn, hasSuperadminAccess, deleteAdminController);
 adminRouter
     .route("/email-users")
-    .post(emailUsersController);
+    .post(isAdminLoggedIn, emailUsersController);
 
 export default adminRouter;
