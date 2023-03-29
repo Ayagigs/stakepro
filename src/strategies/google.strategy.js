@@ -13,7 +13,7 @@ export function googleStrategy() {
             {
                 clientID: GOOGLE_CLIENT_ID,
                 clientSecret: GOOGLE_CLIENT_SECRET,
-                callbackURL: `${CALLBACK_URL}/api/v1/user/auth/google/callback`,
+                callbackURL: `${CALLBACK_URL}`,
                 passReqToCallback: true,
             },
             async (req, _accessToken, _refreshToken, profile, done) => {
