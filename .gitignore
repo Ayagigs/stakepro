@@ -6,3 +6,5 @@ dist
 package-lock.json
 yarn-error.log
 /tmp
+check.js
+newsletterfunc
