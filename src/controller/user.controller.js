@@ -3,7 +3,7 @@ import userModel from "../models/user.model";
 import jwt from "jsonwebtoken";
 import emailTemplateReader from "../utils/emailTemplateReader";
 import HttpResponse from "../response/HttpResponse";
-import { ACCESS_TOKEN, WEB_URL, IPINFO_TOKEN, nexmo } from "../config";
+import { ACCESS_TOKEN, FRONTEND_URL, IPINFO_TOKEN, nexmo } from "../config";
 import sendMail from "../utils/sendMail";
 import randomstring from "randomstring";
 import otpModel from "../models/otp.model";
@@ -159,7 +159,7 @@ export async function sendResetPasswordMail(req, res, next) {
         });
 
         const emailTemplate = await emailTemplateReader(`reset-password.hbs`, {
-            link: `${WEB_URL}/reset-password/${verificationToken}`,
+            link: `${FRONTEND_URL}/reset-password?token=${verificationToken}`,
         });
 
         await sendMail({

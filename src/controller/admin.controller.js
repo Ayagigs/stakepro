@@ -1,7 +1,7 @@
 import HttpException from "../exceptions/HttpException"
 import HttpResponse from "../response/HttpResponse";
 import Admin from "../models/admin.model";
-import { ACCESS_TOKEN } from "../config";
+import { ACCESS_TOKEN, FRONTEND_URL } from "../config";
 import userModel from "../models/user.model";
 import { autoEmail } from "../service/user-email-service";
 import sendMail from "../utils/sendMail";
@@ -23,7 +23,7 @@ export const registerEmail = async (req, res, next) => {
             to: email, 
             subject: 'Admin account registration',
             text: `Dear ${email}, kindly follow this link in order to continue with your registration process as an admin!\n
-                "http://localhost:8080/api/v1/admin/admin-registration-continuation?email=${email}&token=${token}"`
+                ${FRONTEND_URL}/auth/admin/invite?email=${email}&token=${token}`
         }
 
         await sendMail(mailOption)
