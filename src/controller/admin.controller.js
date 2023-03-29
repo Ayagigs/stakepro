@@ -153,6 +153,9 @@ export const adminLogin = async (req, res, next) => {
             if(!admin.isVerified) {
                 throw new HttpException(400,"Unverified account")
             }
+            if(!admin.isBlocked) {
+                throw new HttpException(400,"your account has been blocked, kindly reach out to Superadmin")
+            }
             return res.json({
                 status: "success",
                 message: `Dear ${admin.username}, welcome to the admin dashboard`,
