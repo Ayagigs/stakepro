@@ -67,7 +67,7 @@ userRouter
                 expiresIn: "30d",
             });
             res.redirect(
-                `http://localhost:5173/app/?token=${accessToken}?kycVerified=${req.user.isKycVerified}`
+                `${FRONTEND_URL}/app/?token=${accessToken}?kycVerified=${req.user.isKycVerified}`
             );
         }
     );
@@ -119,7 +119,7 @@ userRouter
 userRouter.route("/kyc/photo").post(fileParser.single("photo"), uploadImg);
 
 userRouter
-    .route("/kyc/otp")
+    .route("/kyc/otp") 
     .post(userAuth, validatorMiddleware(kycOtpSchema, "body"), kycOtp);
 
 userRouter
