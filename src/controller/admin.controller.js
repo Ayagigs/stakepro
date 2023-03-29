@@ -45,7 +45,7 @@ export const registerEmail = async (req, res, next) => {
 export const updateAdminRecord = async (req, res, next) => {
     try {
         const { email, token } = req.query
-        const { username, password } = req.body
+    const { username, password } = req.body
 
         const decoded = jwt.decode(token, { complete: true });
         const payload = decoded.payload;
