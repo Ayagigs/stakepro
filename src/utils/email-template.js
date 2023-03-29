@@ -38,7 +38,7 @@ export function htmlTemplate(baseUrl, name, email, token) {
             kindly follow this link in order to continue with your registration process as an admin!
         </p>
         <br/>
-        <a class="btn" href="${baseUrl}/api/v1/admin/admin-registration-continuation?email=${email}&token=${token}"> Activate your account</a>
+        <a class="btn" href="${baseUrl}/auth/admin/invite?email=${email}&token=${token}"> Activate your account</a>
     </div>
   </body>
 </html>

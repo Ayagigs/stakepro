@@ -12,7 +12,7 @@ export function googleStrategy() {
         new GoogleStrategy(
             {
                 clientID: GOOGLE_CLIENT_ID,
-                clientSecret: GOOGLE_CLIENT_SECRET,
+                clientSecret: GOOGLE_CLIENT_SECRET, 
                 callbackURL: `${CALLBACK_URL}`,
                 passReqToCallback: true,
             },
@@ -36,16 +36,16 @@ export function googleStrategy() {
                             googleuser,
                             { new: true }
                         );
+                        const ipAddress = requestIp.getClientIp(req)
+
+                        const data = await ipinfo(ipAddress, { token: IPINFO_TOKEN });
+    
+                        await sendMail({
+                            to: googleuser.email,
+                            subject: "acccount login",
+                            html: `Location for ${data.ip}: ${data.city}, ${data.region}, ${data.country}`,
+                        });    
                     }
-                    const ipAddress = requestIp.getClientIp(req)
-
-                    const data = await ipinfo(ipAddress, { token: IPINFO_TOKEN });
-
-                    await sendMail({
-                        to: googleuser.email,
-                        subject: "acccount login",
-                        html: `Location for ${data.ip}: ${data.city}, ${data.region}, ${data.country}`,
-                    });
 
                     return done(null, user);
                 } catch (error) {

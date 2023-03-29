@@ -67,7 +67,7 @@ userRouter
                 expiresIn: "30d",
             });
             res.redirect(
-                `${FRONTEND_URL}/app/?token=${accessToken}?kycVerified=${req.user.isKycVerified}`
+                `${FRONTEND_URL}/app/?token=${accessToken}&kycVerified=${req.user.isKycVerified}`
             );
         }
     );

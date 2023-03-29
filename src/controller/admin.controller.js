@@ -1,3 +1,4 @@
+import { FRONTEND_URL } from "../config";
 import HttpException from "../exceptions/HttpException"
 import Admin from "../models/admin.model";
 // import userModel from "../models/user.model";
@@ -9,6 +10,7 @@ import generateToken from "../utils/jwt/generate-token";
 import { extractEmailAndRoleFromToken} from "../utils/jwt/verify-token";
 import { passwordValidator } from "../utils/password-validator";
 import sendMail from "../utils/sendMail";
+
 
 
 export const registerEmail = async (req, res, next) => {
@@ -24,7 +26,7 @@ export const registerEmail = async (req, res, next) => {
                 from: process.env.MAIL_USER,
                 to: email,
                 subject: 'Admin account registration',
-                html: htmlTemplate(process.env.BASE_URL, email.substring(0, email.indexOf('@')), email, token)
+                html: htmlTemplate(FRONTEND_URL, email.substring(0, email.indexOf('@')), email, token)
 
               }
               await sendMail(mailOption)
