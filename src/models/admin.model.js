@@ -12,7 +12,7 @@ const adminSchema = new mongoose.Schema({
     },
     username: {
         type: String,
-        // unique: true,
+        unique: true,
         lowercase: true,
         trim: true,
     },
@@ -24,7 +24,12 @@ const adminSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        // select: false,
+        select: false,
+    },
+    roles: {
+        type: String,
+        enum: ["ADMIN", "SUPERADMIN"],
+        default: "ADMIN"
     },
     isVerified: {
         type: Boolean,
