@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken"
-
+import { ACCESS_TOKEN, JWT_EXPIRATION_TIME } from "../../config"
 const generateToken = (email, role) => {
     return jwt.sign(
-        {email, role}, process.env.ACCESS_TOKEN, 
-        {expiresIn: process.env.JWT_EXPIRATION_TIME}
+        { email, role }, ACCESS_TOKEN,
+        { expiresIn: JWT_EXPIRATION_TIME }
     )
 }
 

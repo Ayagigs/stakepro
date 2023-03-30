@@ -62,5 +62,7 @@ export const {
     IPINFO_TOKEN,
     PORT,
     CALLBACK_URL,
-    FRONTEND_URL
+    FRONTEND_URL,
+    JWT_KEY,
+    JWT_EXPIRATION_TIME
 } = process.env;

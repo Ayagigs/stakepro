@@ -27,6 +27,7 @@ export const deleteFaq = async (req, res, next) => {
         const { id } = req.params;
         const faq = await faqModel.findById(id);
         if (!faq) throw new HttpException(404, "faq not found");
+        faq.delete()
         return res.status(200).send(new HttpResponse("success", "deleted faq"));
     } catch (err) {
         next(err);
