@@ -1,6 +1,7 @@
 import express from 'express';
 import userRouter from "./routes/user.route"
 import faqRouter from "./routes/faq.route"
+import blogRouter from './routes/blog.route';
 import errorMiddleware from "./middleware/error.middleware"
 import { connectDB, PORT } from "./config"
 import passport from "passport";
@@ -17,7 +18,7 @@ const port = PORT || 8080
 const path = "/api/v1"
 connectDB()
 
-app.use(cors({origin: '*', credentials: true}));
+app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json())
 app.use(passport.initialize());
 
@@ -25,10 +26,11 @@ app.use(passport.initialize());
 // add routes here
 app.use(`${path}/user`, userRouter)
 app.use(`${path}/admin`, adminRouter)
-app.use (`${path}/post`, postRouter);
+app.use(`${path}/post`, postRouter);
 // app.use (`${path}/newsletter`, newsRouter)
-app.use (`${path}/support`, supportRouter)
+app.use(`${path}/support`, supportRouter)
 app.use(`${path}/faq`, faqRouter)
+app.use(`${path}/blog`, blogRouter)
 
 
 app.use(errorMiddleware)
